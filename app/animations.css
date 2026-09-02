@@ -1,0 +1,22 @@
+@keyframes heroRise{from{opacity:0;transform:translateY(28px);filter:blur(7px)}to{opacity:1;transform:none;filter:none}}
+@keyframes instrumentReveal{from{opacity:0;transform:translateX(28px) scale(.975);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:none;clip-path:inset(0)}}
+@keyframes lineGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes sectionReveal{from{opacity:.18;transform:translateY(54px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+@keyframes cardReveal{from{opacity:0;transform:translateY(35px)}to{opacity:1;transform:none}}
+
+.hero-copy-wrap{animation:heroRise .9s cubic-bezier(.2,.75,.2,1) both .08s}.instrument{animation:instrumentReveal 1.15s cubic-bezier(.2,.8,.2,1) both .2s}.topbar{animation:heroRise .65s ease both}.marquee{animation:heroRise .7s ease both .5s}
+
+@supports (animation-timeline:view()) {
+  .thesis-copy,.intake-heading>div:nth-child(2),.process-heading,.manifesto{animation:sectionReveal both linear;animation-timeline:view();animation-range:entry 8% cover 34%}
+  .thesis-grid article,.process-grid article{animation:cardReveal both linear;animation-timeline:view();animation-range:entry 4% cover 24%}
+  .thesis-grid article:nth-child(2),.process-grid article:nth-child(2){animation-range:entry 9% cover 29%}
+  .thesis-grid article:nth-child(3),.process-grid article:nth-child(3){animation-range:entry 14% cover 34%}
+  .process-grid article:nth-child(4){animation-range:entry 18% cover 38%}
+  .intake-shell{animation:sectionReveal both linear;animation-timeline:view();animation-range:entry 4% cover 26%}
+}
+
+.instrument:hover .orbit-a{animation-duration:4.5s}.instrument:hover .orbit-b{animation-duration:8s}.instrument:hover .orbit-c{animation-duration:11s}.instrument:hover .core{box-shadow:0 0 0 16px rgba(201,168,92,.03),0 0 110px rgba(201,168,92,.16);transition:box-shadow .5s ease}.instrument:hover .orbit-node{border-color:rgba(201,168,92,.46);color:#d7ccb0;transition:border-color .4s ease,color .4s ease}
+
+.choice,.radio-card,.primary,.secondary,.process-grid article,.thesis-grid article,.topbar-link{will-change:transform}.choice:active,.radio-card:active,.primary:active,.secondary:active{transform:scale(.985)}
+
+@media(prefers-reduced-motion:reduce){.hero-copy-wrap,.instrument,.topbar,.marquee,.thesis-copy,.intake-heading>div:nth-child(2),.process-heading,.manifesto,.thesis-grid article,.process-grid article,.intake-shell{animation:none!important}.instrument:hover .orbit-a,.instrument:hover .orbit-b,.instrument:hover .orbit-c{animation:none!important}}
