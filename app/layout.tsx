@@ -3,6 +3,7 @@ import { Manrope, Newsreader } from 'next/font/google';
 import { ElectricBackdrop } from '@/components/electric-backdrop';
 import './globals.css';
 import './animations.css';
+import './flow-texture.css';
 import './kintsugi.css';
 
 const serif = Newsreader({ subsets: ['latin'], variable: '--font-serif' });
