@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Manrope, Newsreader } from 'next/font/google';
 import './globals.css';
 import './animations.css';
+import './kintsugi.css';
 
 const serif = Newsreader({ subsets: ['latin'], variable: '--font-serif' });
 const sans = Manrope({ subsets: ['latin'], variable: '--font-sans' });
