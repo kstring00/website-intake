@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, Download, RefreshCw, ShieldCheck } from 'lucide-react';
+import { RollingButton, RollingLabel, rollingTransition } from '@/components/rolling-action';
 import {
   actionOptions,
   assetOptions,
@@ -76,13 +78,24 @@ function Field({ label, help, children }: { label: string; help?: string; childr
 }
 
 function SelectCard({ active, onClick, children, copy }: { active: boolean; onClick: () => void; children: React.ReactNode; copy?: string }) {
-  return <button type="button" className={`select-card ${active ? 'active' : ''}`} onClick={onClick}>
+  const reduceMotion = useReducedMotion();
+  return <motion.button
+    type="button"
+    className={`select-card ${active ? 'active' : ''}`}
+    onClick={onClick}
+    initial="rest"
+    animate="rest"
+    whileHover={reduceMotion ? 'rest' : 'active'}
+    whileFocus={reduceMotion ? 'rest' : 'active'}
+    transition={rollingTransition}
+  >
     <span className="select-mark">{active ? <Check size={12}/> : null}</span>
-    <span><strong>{children}</strong>{copy && <small>{copy}</small>}</span>
-  </button>;
+    <span className="select-copy"><RollingLabel>{children}</RollingLabel>{copy && <small>{copy}</small>}</span>
+  </motion.button>;
 }
 
 export function IntakeExperience() {
+  const reduceMotion = useReducedMotion();
   const [step, setStep] = useState(0);
   const [data, setData] = useState<Intake>(blank);
   const [error, setError] = useState('');
@@ -248,9 +261,9 @@ export function IntakeExperience() {
         {compass.slice(0, 5).map(([label, value]) => <div key={label}><span>{label}</span><strong>{value}</strong></div>)}
       </div>
       <div className="complete-actions">
-        <button className="gold-button" type="button" onClick={checkout} disabled={checkoutLoading}>{checkoutLoading ? 'Opening Stripe…' : 'Reserve project'} <ArrowRight size={15}/></button>
-        <button className="quiet-button" type="button" onClick={downloadBrief}><Download size={14}/> Download brief</button>
-        <button className="quiet-button" type="button" onClick={reset}><RefreshCw size={14}/> New project</button>
+        <RollingButton className="gold-button" onClick={checkout} disabled={checkoutLoading} label={checkoutLoading ? 'Opening Stripe…' : 'Reserve project'} icon={<ArrowRight size={15}/>}/>
+        <RollingButton className="quiet-button" onClick={downloadBrief} label="Download brief" icon={<Download size={14}/>}/>
+        <RollingButton className="quiet-button" onClick={reset} label="New project" icon={<RefreshCw size={14}/>}/>
       </div>
       {error && <p className="brief-error">{error}</p>}
     </section>;
@@ -272,9 +285,20 @@ export function IntakeExperience() {
 
     <div className="brief-body">
       <nav className="brief-step-nav" aria-label="Project brief progress">
-        {steps.map((item, index) => <button key={item.id} type="button" onClick={() => jumpTo(index)} disabled={index > step} className={index === step ? 'active' : index < step ? 'done' : ''}>
-          <span>{String(index + 1).padStart(2, '0')}</span>{item.label}
-        </button>)}
+        {steps.map((item, index) => <motion.button
+          key={item.id}
+          type="button"
+          onClick={() => jumpTo(index)}
+          disabled={index > step}
+          className={index === step ? 'active' : index < step ? 'done' : ''}
+          initial="rest"
+          animate="rest"
+          whileHover={reduceMotion || index > step ? 'rest' : 'active'}
+          whileFocus={reduceMotion || index > step ? 'rest' : 'active'}
+          transition={rollingTransition}
+        >
+          <span>{String(index + 1).padStart(2, '0')}</span><RollingLabel>{item.label}</RollingLabel>
+        </motion.button>)}
         <div className="autosave"><ShieldCheck size={13}/> Saved on this device</div>
       </nav>
 
@@ -367,16 +391,16 @@ export function IntakeExperience() {
             <p>This is a high-level signal based on the pages and functionality you selected—not a quote or final scope.</p>
           </div>
           <label className="consent-row"><input type="checkbox" checked={data.consent} onChange={e=>update('consent',e.target.checked)}/><span><strong>Yes — this sounds right.</strong> I understand this brief is the starting direction, not a final contract, price, or fixed scope.</span></label>
-          <button type="button" className="download-inline" onClick={downloadBrief}><Download size={14}/> Download my answers</button>
+          <RollingButton className="download-inline" onClick={downloadBrief} label="Download my answers" icon={<Download size={14}/>}/>
         </div>}
 
         {error && <p className="brief-error">{error}</p>}
 
         <div className="brief-nav">
-          <button type="button" className="quiet-button" onClick={goBack} disabled={step === 0}><ArrowLeft size={14}/> Back</button>
+          <RollingButton className="quiet-button" onClick={goBack} disabled={step === 0} label="Back" icon={<ArrowLeft size={14}/>}/>
           {step < steps.length - 1
-            ? <button type="button" className="gold-button" onClick={goNext}>Continue <ArrowRight size={15}/></button>
-            : <button type="button" className="gold-button" onClick={submit} disabled={submitting}>{submitting ? 'Sending…' : 'Send my brief'} <ArrowRight size={15}/></button>}
+            ? <RollingButton className="gold-button" onClick={goNext} label="Continue" icon={<ArrowRight size={15}/>}/>
+            : <RollingButton className="gold-button" onClick={submit} disabled={submitting} label={submitting ? 'Sending…' : 'Send my brief'} icon={<ArrowRight size={15}/>}/>} 
         </div>
       </div>
     </div>
