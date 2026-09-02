@@ -1,5 +1,5 @@
-import { ArrowDownRight, ArrowRight } from 'lucide-react';
 import { IntakeExperience } from '@/components/intake-experience';
+import { RollingLink } from '@/components/rolling-action';
 import { contactEmail, studioName } from '@/lib/intake-config';
 
 const phases = [
@@ -16,7 +16,7 @@ export default function HomePage() {
         <span className="brand-mark">W/</span>
         <span>{studioName}<small>WEB DESIGN + DEVELOPMENT</small></span>
       </a>
-      <a className="topbar-link" href="#intake">Begin <ArrowDownRight size={14}/></a>
+      <RollingLink href="#intake" label="Begin" className="topbar-link" />
     </header>
 
     <main id="top">
@@ -25,7 +25,7 @@ export default function HomePage() {
           <p className="micro-label">WEBSITES, BUILT WITH YOU.</p>
           <h1>Tell me what you’re building.</h1>
           <p>A thoughtful brief gives me what I need to turn the idea into a real website—then we shape it together.</p>
-          <a className="hero-cta" href="#intake">Begin your project <ArrowRight size={16}/></a>
+          <RollingLink href="#intake" label="Begin your project" className="hero-cta" />
         </div>
 
         <div className="kintsugi-object" aria-label="A fractured form repaired with a gold seam">
@@ -78,7 +78,7 @@ export default function HomePage() {
     <footer className="footer-minimal">
       <div><span className="footer-mark">W/</span><strong>{studioName}</strong></div>
       <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
-      <a href="#intake">Start a project <ArrowRight size={14}/></a>
+      <RollingLink href="#intake" label="Start a project" className="footer-project-link" />
     </footer>
   </div>;
 }
