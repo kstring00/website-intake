@@ -1,7 +1,8 @@
 'use client';
 
 import { motion, useReducedMotion } from 'motion/react';
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { HTMLMotionProps } from 'motion/react';
+import type { ReactNode } from 'react';
 
 const outgoing = {
   rest: { transform: 'translateY(0%)' },
@@ -38,7 +39,7 @@ export function RollingLabel({ children, className = '' }: { children: ReactNode
   </span>;
 }
 
-type RollingButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
+type RollingButtonProps = Omit<HTMLMotionProps<'button'>, 'children'> & {
   label: string;
   icon?: ReactNode;
 };
