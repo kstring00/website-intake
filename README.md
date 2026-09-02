@@ -16,6 +16,7 @@ A premium website-project discovery, scoping, and payment experience built with 
 - Optional Resend email delivery of the full intake to the studio owner
 - Server-side Stripe Checkout project-deposit flow
 - Stripe `client_reference_id` and metadata connect the payment to the intake submission
+- Stripe webhook endpoint for server-side payment completion handling
 - Stripe payment confirmation page
 - Responsive/mobile UI and reduced-motion support
 
@@ -38,6 +39,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_DEPOSIT_PRICE_ID=price_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_AUTOMATIC_TAX=false
 
 RESEND_API_KEY=re_...
@@ -54,17 +56,19 @@ NEXT_PUBLIC_CONTACT_EMAIL=hello@yourdomain.com
 2. Add a one-time Price at the deposit amount you want to collect.
 3. Copy that `price_...` ID to `STRIPE_DEPOSIT_PRICE_ID`.
 4. Add your Stripe secret key as `STRIPE_SECRET_KEY` in Vercel/project environment variables.
-5. Keep test-mode keys and a test Price while validating the flow.
-6. Switch both the secret key and Price ID to live-mode values when you are ready to accept real payments.
-7. Only set `STRIPE_AUTOMATIC_TAX=true` after Stripe Tax is configured for the account.
+5. Add a Stripe webhook endpoint at `https://YOUR-DOMAIN/api/stripe/webhook` and subscribe it to `checkout.session.completed`.
+6. Copy the webhook signing secret to `STRIPE_WEBHOOK_SECRET`.
+7. Keep test-mode keys, Price, and webhook while validating the flow.
+8. Switch the secret key, Price ID, and webhook to live-mode values when you are ready to accept real payments.
+9. Only set `STRIPE_AUTOMATIC_TAX=true` after Stripe Tax is configured for the account.
 
-The Checkout route lives at `app/api/checkout/route.ts`. The browser never receives the secret key.
+The Checkout route lives at `app/api/checkout/route.ts`. The browser never receives the secret key. The webhook route lives at `app/api/stripe/webhook/route.ts` and provides a server-side payment-completion path even if the customer closes the browser before the success page loads.
 
 ### Intake email delivery
 
 The intake endpoint lives at `app/api/intake/route.ts`.
 
-If `RESEND_API_KEY` and `INTAKE_NOTIFICATION_EMAIL` are configured, the full brief is emailed to you and the prospect's email is used as the reply-to address.
+If `RESEND_API_KEY` and `INTAKE_NOTIFICATION_EMAIL` are configured, the full brief is emailed to you and the prospect's email is used as the reply-to address. The same email configuration is also used by the Stripe webhook to notify you when a project deposit completes.
 
 If Resend is not configured, the route still works in development and logs the payload server-side. For production, configure delivery before sharing the site publicly.
 
@@ -88,7 +92,7 @@ The full guided experience is in `components/intake-experience.tsx`.
 3. Deploy with test Stripe keys first.
 4. Submit a full test intake.
 5. Complete a Stripe test Checkout.
-6. Confirm the intake email, Stripe payment, success page, and project reference all match.
+6. Confirm the intake email, Stripe payment, webhook notification, success page, and project reference all match.
 7. Switch to live Stripe values only after the end-to-end test works.
 
 ## Important business note
