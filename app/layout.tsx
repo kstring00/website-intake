@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Manrope, Newsreader } from 'next/font/google';
+import { ElectricBackdrop } from '@/components/electric-backdrop';
 import './globals.css';
 import './animations.css';
 import './kintsugi.css';
@@ -15,7 +16,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${serif.variable} ${sans.variable}`}>{children}</body>
+      <body className={`${serif.variable} ${sans.variable}`}>
+        <ElectricBackdrop />
+        {children}
+      </body>
     </html>
   );
 }
